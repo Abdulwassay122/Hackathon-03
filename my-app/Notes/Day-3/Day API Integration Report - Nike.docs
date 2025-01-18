@@ -1,0 +1,26 @@
+ API integration process:
+
+1. First I have migrated the data from the provided api to sanity cms using the script(You can see the script in Script folder).
+2. Then I fetch product data from sanity and displayed in frontend at (/products).
+3. After that i have created different endpoints for fetching products of specific catagories and tabs.
+4. here all the endpoints:
+/products
+/products/productbytag/Men's
+/products/productbytag/Women's
+/products/productbytag/Shoes
+/products/productbystatus/Seller
+/products/productbystatus/Just
+
+ Adjustments made to schemas:
+
+I have added these additional things to provided schema:
+rating,
+ratingCount,
+sizes,
+discountpercentage
+
+ Migration steps and tools used:
+
+I have used provided script for migrating data (Script is provided in Script Folder)
+
+
