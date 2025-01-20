@@ -12,7 +12,7 @@ export default function Hoome1() {
       </div>
       <div className='px-9 w-full items-center flex flex-col gap-12'>
         <div>
-            <Image className='w-full h-auto' src={img} alt="" />
+            <Image src={img} alt="" />
         </div>
         <div className=' flex flex-col gap-6 items-center'>
             <div className='flex flex-col gap-1'>

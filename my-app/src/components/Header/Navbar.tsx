@@ -1,12 +1,21 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import Image from "next/image";
 import logo1 from './assets/Vector (6).svg'
 import nike from './assets/Vector (7).svg'
 import wishlidt from './assets/Frame.svg'
-import cart from './assets/Frame (1).svg'
+import cartt from './assets/Frame (1).svg'
 import search from './assets/Frame (2).svg'
 import Link from 'next/link'
+import { useCartContext } from '@/app/Contexts/CartContext';
+
 export default function Navbar() {
+  const cartContext = useCartContext();
+    if (!cartContext) {
+      return <div>Loading...</div>;
+    }
+    const { cart, isActive, setIsActive } = cartContext;
+
   return (
     <header className=''>
       <div className='w-full h-9 flex justify-between items-center px-10 bg-[#F5F5F5]'>
@@ -30,13 +39,13 @@ export default function Navbar() {
         <div className='lg:w-[1211px] h-full flex items-center justify-end gap-60'>
             <div className='flex items-center xl:w-[890px] gap-10 justify-between'>
             <nav className='md:block hidden'>
-                <ul className=' text-[16px] leading-6 font-[500] gap-7 flex '>
-                    <Link href="/products"><li>All Products</li></Link>
-                    <Link href="/products/productbytag/Men's"><li>Men</li></Link>
-                    <Link href="/products/productbytag/Women's"><li>Women</li></Link>
-                    <Link href="/products/productbytag/Shoes"><li>Shoes</li></Link>
-                    <Link href="/products/productbystatus/Seller"><li>Best Seller</li></Link>
-                    <Link href="/products/productbystatus/Just"><li>Just In</li></Link>
+                <ul className=' text-[16px] leading-6 font-[500] gap-7 flex'>
+                    <Link href="/products"><li onClick={()=>setIsActive(1)} className={`${isActive===1?'font-semibold border-b-2':''} border-solid  border-black`}>All Products</li></Link>
+                    <Link href="/products/productbytag/Men's"><li onClick={()=>setIsActive(2)} className={`${isActive===2?'font-semibold border-b-2':''} w-full border-solid  border-black`}>Men</li></Link>
+                    <Link href="/products/productbytag/Women's"><li onClick={()=>setIsActive(3)} className={`${isActive===3?'font-semibold border-b-2':''} border-solid border-black`}>Women</li></Link>
+                    <Link href="/products/productbytag/Shoes"><li onClick={()=>setIsActive(4)} className={`${isActive===4?'font-semibold border-b-2':''} border-solid  border-black`}>Shoes</li></Link>
+                    <Link href="/products/productbystatus/Seller"><li onClick={()=>setIsActive(5)} className={`${isActive===5?'font-semibold border-b-2':''} border-solid  border-black `}>Best Seller</li></Link>
+                    <Link href="/products/productbystatus/Just"><li onClick={()=>setIsActive(6)} className={`${isActive===6?'font-semibold border-b-2':''} border-solid border-black`}>Just In</li></Link>
                 </ul>
             </nav>
             <div className='relative lg:block hidden'>
@@ -46,8 +55,8 @@ export default function Navbar() {
             </div>
         </div>
         <div className='w-[84px] flex justify-between'>
-            <div className='h-9 w-9 flex justify-center items-center'><Image src={wishlidt} alt="" /></div>
-            <div className='h-9 w-9 flex justify-center items-center'><Link href="/cart"><Image src={cart} alt="" /></Link></div>
+            <div className='h-9 w-9 flex justify-center hover:bg-[#F5F5F5] rounded-full items-center'><Image src={wishlidt} alt="" /></div>
+            <div className='h-9 w-9 flex justify-center hover:bg-[#F5F5F5] rounded-full items-center relative'><Link href="/cart"><Image src={cartt} alt="" /><p className='absolute top-3 left-[14px] text-[11px]'>{cart.length===0?'':cart.length}</p></Link></div>
         </div>
       </div>
         <div className='relative mx-10 lg:hidden block mb-4'>

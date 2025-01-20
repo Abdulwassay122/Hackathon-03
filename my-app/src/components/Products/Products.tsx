@@ -1,13 +1,16 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import filter from "./assets/Frame (8).svg";
 import sort from "./assets/Frame (9).svg";
-import arrowup from "./assets/Frame (10).svg";
 import { client } from "@/sanity/lib/client";
 import Link from "next/link";
 import star from "./assets/reshot-icon-star-ZH7KM9EGN8.svg";
 import graystar from "./assets/graystar.svg";
 import graystarhalf from "./assets/graystarhalf.svg";
+import SideBar from "./SideBar";
+import { useCartContext } from "@/app/Contexts/CartContext";
+import ProductSkeleton from "../Loader/ProductSkeleLoader";
 
 interface Product {
   productName: string;
@@ -25,8 +28,22 @@ interface Product {
   sizes: [string];
 }
 
-export default async function Products() {
-  const data: Product[] = await client.fetch(`*[_type == 'product']{
+export default function Products() {
+
+  const cartContext = useCartContext();
+    if (!cartContext) {
+      return <div>Loading...</div>;
+    }
+    const { under2500, under7500, men, women } = cartContext;
+
+  const[data, setData] = useState<Product[]>()
+  const[loading, setLoading] = useState<boolean>(true)
+
+  useEffect(()=>{
+    fetchApi()
+  },[under2500, under7500, men, women])
+  async function fetchApi(){
+  const item = await client.fetch(`*[_type == 'product']{
   status,
   "imageUrl": image.asset->url,
   colors,
@@ -39,8 +56,21 @@ export default async function Products() {
   discountPercentage,
   rating,
   ratingCount,
-  sizes
 }`);
+    if(men===true){
+      setData(item.filter((product: Product) => product.category.includes('Men')))
+    } if(women===true){
+      setData(item.filter((product: Product) => product.category.includes('Women')))
+    } if(under2500===true){
+      setData(item.filter((product: Product) => product.price <= 2500))
+    } if(under7500===true){
+      setData(item.filter((product: Product) => product.price <= 7500 ))
+    }if(!men && !women && !under2500 && !under7500){
+      setData(item)
+    }
+
+    setLoading(false)
+  }
 
   function ratingSystem(Rating: number) {
     const totalStars = 5;
@@ -81,115 +111,19 @@ export default async function Products() {
       </div>
       <div className="flex">
         {/* sidebar */}
-        <div className="w-[260px] h-full  flex-col gap-10 pr-5 lg:flex hidden">
-          <div className="w-[192px] h-[400.72px] flex flex-col gap-[14.59px] overflow-y-auto">
-            <p className="text-[15px] leading-[21.6px] font-[500]">Shoes</p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Sports Bras
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Tops & T-Shirts
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Hoodies & Sweatshirts
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">Jackets</p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Trousers & Tights
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">Shorts</p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Tracksuits
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Jumpsuits & Rompers
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">
-              Skirts & Dresses
-            </p>
-            <p className="text-[15px] leading-[21.6px] font-[500]">Socks</p>
-            <p className="text-[15px] w-[150px] leading-[21.6px] font-[500]">
-              Accessories & Equipment
-            </p>
-          </div>
-          <div className="w-[192px]">
-            {/* gender */}
-            <div className="border-t-[1px] border-solid">
-              <div className="h-12 flex justify-between items-center">
-                <p className="text-[16px] leading-6 font-[500]">Gender</p>
-                <Image src={arrowup} alt="" />
-              </div>
-              <div className="pb-6 pt-1 pr-[5.68px] pl-[2px]">
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Men
-                  </label>
-                </div>
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Women
-                  </label>
-                </div>
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Unisex
-                  </label>
-                </div>
-              </div>
-            </div>
-            {/* kids     */}
-            <div className="border-t-[1px] border-solid">
-              <div className="h-12 flex justify-between items-center">
-                <p className="text-[16px] leading-6 font-[500]">Kids</p>
-                <Image src={arrowup} alt="" />
-              </div>
-              <div className="pb-6 pt-1 pr-[5.68px] pl-[2px]">
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Boys
-                  </label>
-                </div>
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Girls
-                  </label>
-                </div>
-              </div>
-            </div>
-            {/* shop by price  */}
-            <div className="border-t-[1px] border-solid">
-              <div className="h-12 flex justify-between items-center">
-                <p className="text-[16px] leading-6 font-[500]">
-                  Shop By Price
-                </p>
-                <Image src={arrowup} alt="" />
-              </div>
-              <div className="pb-6 pt-1 pr-[5.68px] pl-[2px]">
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    Under ₹ 2 500.00
-                  </label>
-                </div>
-                <div className="flex gap-[6px] items-center">
-                  <input className="h-5 w-5" type="checkbox" />
-                  <label className="text-[15px] leading-6" htmlFor="input">
-                    ₹ 2 501.00 - ₹ 7 500.00
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SideBar/>
         {/* Products */}
-        <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
+        {loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
+          <ProductSkeleton/>
+          <ProductSkeleton/>
+          <ProductSkeleton/>
+          <ProductSkeleton/>
+          <ProductSkeleton/>
+          <ProductSkeleton/>
+          </div>}
+        {!loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
           {/* Product 01 */}
-          {data.map((item,index) => (
+          {data?.map((item,index) => (
             <Link
               key={index}
               className="shadow-md"
@@ -198,7 +132,7 @@ export default async function Products() {
               <div className="w-[348px] h[533px]">
                 <div className="relative">
                   <Image
-                    className="h-full w-auto"
+                    className="h-full w-full"
                     height={400}
                     width={400}
                     src={item.imageUrl}
@@ -223,7 +157,7 @@ export default async function Products() {
                       </p>
                       {item.colors.map((ele, index) => {
                         return (
-                          <p className="text-[15px] leading-6  text-[#757575]">
+                          <p key={index} className="text-[15px] leading-6  text-[#757575]">
                             {ele}
                           </p>
                         );
@@ -244,8 +178,8 @@ export default async function Products() {
               </div>
             </Link>
           ))}
-        </div>
-      </div>
+        </div>}
+              </div>
       {/*  Bottom Tags*/}
       <div className="py-16 flex flex-col gap-6 xl:pl-[300px] lg:pl-[150px] md:pl-[50px] pl-8">
         <h2 className="text-[19px] leading-6 font-[500]">Related Categories</h2>

@@ -36,7 +36,7 @@ export default async function Hoome4() {
   discountPercentage,
   rating,
   ratingCount,
-  sizes
+  
 }`)
     const womenData : Product[] = await client.fetch(`*[_type == 'product' && category match "* Women's *"]{
   status,
@@ -51,7 +51,7 @@ export default async function Hoome4() {
   discountPercentage,
   rating,
   ratingCount,
-  sizes
+  
 }`)
   return (
     <section className='px-12 flex flex-col gap-[25px]'>
