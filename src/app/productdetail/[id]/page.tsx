@@ -50,7 +50,7 @@ export interface cartItem {
   size: string;
 }
 
-export default function page({ params: { id } }: PageProps) {
+export default function productDetail({ params: { id } }: PageProps) {
   const [data, setData] = useState<Product>();
   const [color, setColor] = useState<string>();
   const [size, setSize] = useState<string>();
@@ -88,19 +88,7 @@ export default function page({ params: { id } }: PageProps) {
     setSize(`${item[0].sizes[0]}`);
     setLoading(false);
   }
-  // Add to Cart Function -----------------
-    const handleSuccess = () => {
-    toast.success("Product added to cart successfully!", {
-      position: "bottom-right",
-      autoClose: 3000, // 3 seconds
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  };
+
 
 
   function addToCartt(){

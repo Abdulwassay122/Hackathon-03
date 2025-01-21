@@ -48,6 +48,7 @@ export default function Products({ params: { id } }: PageProps) {
   useEffect(()=>{
     fetchApi()
   },[under2500, under7500, men, women])
+  
   async function fetchApi(){
   const item = await client.fetch(`*[_type == 'product' && status match "* ${id} *"]{
   status,

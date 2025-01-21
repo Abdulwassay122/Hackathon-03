@@ -1,9 +1,6 @@
 "use client"
 import { client } from '@/sanity/lib/client'
 import React, { useState } from 'react'
-import star from "./assets/reshot-icon-star-ZH7KM9EGN8.svg";
-import graystar from "./assets/graystar.svg";
-import graystarhalf from "./assets/graystarhalf.svg";
 import Link from "next/link";
 import Image from "next/image";
 
