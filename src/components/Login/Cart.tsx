@@ -56,7 +56,7 @@ console.log(data.length)
               {data.length === 0 ? <div className=' w-full flex items-center sm:h-[218px] justify-center'>No Item</div>:''}
               {data.map((item, index)=>{
 
-               return(<div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>
+               return(<Link href={`/productdetail/${item.productId}`}> <div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>
                 <div className='sm:h-[170px] sm:flex-row flex-col flex sm:gap-[30px]'>
                     <Image width={100} height={100} className='h-[150px] w-auto' src={item.image} alt="" />
                     <div className='flex gap-4 sm:flex-row flex-col justify-between sm:w-[537px] pt-2'>
@@ -76,7 +76,7 @@ console.log(data.length)
                         <p className='text-[15px] text-[#111111] leading-7'>{`₹ ${item.price*item.quantity}`}</p>
                     </div>
                 </div>
-              </div>)})}
+              </div></Link>)})}
             </div>
         </div>
 

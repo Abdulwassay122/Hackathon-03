@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 import Image from "next/image";
 import logo1 from './assets/Vector (6).svg'
 import nike from './assets/Vector (7).svg'
@@ -8,6 +8,7 @@ import cartt from './assets/Frame (1).svg'
 import searchh from './assets/Frame (2).svg'
 import Link from 'next/link'
 import { useCartContext } from '@/app/Contexts/CartContext';
+import { useRouter } from 'next/navigation';
 // import SearchProducts from '../Products/SearchProduct';
 
 export default function Navbar() {
@@ -22,10 +23,17 @@ export default function Navbar() {
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value);
     };
+    const router = useRouter();
 
-    // useEffect(()=>{
-    //     ()=>{return <SearchProducts search={search}/>}
-    // },[search])
+    useEffect(()=>{
+      if(search.length > 0 ){
+        const some = () => {
+          router.push(`/products/productsearch/${search.replace(/ /g, '%20')}`)
+        }
+        some();
+        console.log(search)
+      }
+    },[search])
 
   return (
     <header className=''>

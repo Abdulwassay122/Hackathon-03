@@ -43,36 +43,41 @@ export default function SearchProducts({search}:{search:string}) {
     fetchApi()
   },[under2500, under7500, men, women])
   async function fetchApi(){
-  const item = await client.fetch(`*[_type == 'product']{
-  status,
-  "imageUrl": image.asset->url,
-  colors,
-  _id,
-  category,
-  description,
-  inventory,
-  productName,
-  price,
-  discountPercentage,
-  rating,
-  ratingCount,
-}`);
-
-
-
-    if(men===true){
-      setData(item.filter((product: Product) => product.category.includes('Men')))
-    } if(women===true){
-      setData(item.filter((product: Product) => product.category.includes('Women')))
-    } if(under2500===true){
-      setData(item.filter((product: Product) => product.price <= 2500))
-    } if(under7500===true){
-      setData(item.filter((product: Product) => product.price <= 7500 ))
-    }if(!men && !women && !under2500 && !under7500){
-      setData(item.filter((product: Product) => product.category.includes(`${search}`) || product.productName.includes(`${search}`) || product.description.includes(`${search}`) ))
+    try {
+      const item = await client.fetch(`*[_type == 'product']{
+      status,
+      "imageUrl": image.asset->url,
+      colors,
+      _id,
+      category,
+      description,
+      inventory,
+      productName,
+      price,
+      discountPercentage,
+      rating,
+      ratingCount,
+    }`);
+    
+        if(men===true){
+          setData(item.filter((product: Product) => product.category.includes('Men')))
+        } if(women===true){
+          setData(item.filter((product: Product) => product.category.includes('Women')))
+        } if(under2500===true){
+          setData(item.filter((product: Product) => product.price <= 2500))
+        } if(under7500===true){
+          setData(item.filter((product: Product) => product.price <= 7500 ))
+        }if(!men && !women && !under2500 && !under7500){
+          setData(item.filter((product: Product) => product.category.toLowerCase().includes(`${search.toLowerCase().replace(/%20/g,' ')}`) || product.productName.toLowerCase().includes(`${search.toLowerCase().replace(/%20/g,' ')}`) || product.description.toLowerCase().includes(`${search.toLowerCase().replace(/%20/g,' ')}`) ))
+        }
+        
+        console.log('object',search.replace(/%20/g,' '))
+        setLoading(false)
+      
+    } catch (error) {
+      console.error(error)
+      throw new Error('Check Your internet Connection!')  
     }
-
-    setLoading(false)
   }
 
   function ratingSystem(Rating: number) {
@@ -124,9 +129,10 @@ export default function SearchProducts({search}:{search:string}) {
           <ProductSkeleton/>
           <ProductSkeleton/>
           </div>}
-        {!loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
+          {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
+        <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
           {/* Product 01 */}
-          {data?.map((item,index) => (
+          {!loading && data?.map((item,index) => (
             <Link
               key={index}
               className="shadow-md"
@@ -181,7 +187,7 @@ export default function SearchProducts({search}:{search:string}) {
               </div>
             </Link>
           ))}
-        </div>}
+        </div>
               </div>
       {/*  Bottom Tags*/}
       <div className="py-16 flex flex-col gap-6 xl:pl-[300px] lg:pl-[150px] md:pl-[50px] pl-8">

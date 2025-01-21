@@ -1,4 +1,5 @@
 import Hoome from "@/components/Home/Hoome";
+import SearchProducts from "@/components/Products/SearchProduct";
 
 
 
