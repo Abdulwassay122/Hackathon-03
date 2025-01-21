@@ -49,34 +49,39 @@ export default function Products({ params: { id } }: PageProps) {
     fetchApi()
   },[under2500, under7500, men, women])
   async function fetchApi(){
-  const item = await client.fetch(`*[_type == 'product' && category match "* ${id} *"]{
-  status,
-  "imageUrl": image.asset->url,
-  colors,
-  _id,
-  category,
-  description,
-  inventory,
-  productName,
-  price,
-  discountPercentage,
-  rating,
-  ratingCount,
-
-}`);
-    if(men===true){
-      setData(item.filter((product: Product) => product.category.includes('Men')))
-    } if(women===true){
-      setData(item.filter((product: Product) => product.category.includes('Women')))
-    } if(under2500===true){
-      setData(item.filter((product: Product) => product.price <= 2500))
-    } if(under7500===true){
-      setData(item.filter((product: Product) => product.price <= 7500 ))
-    }if(!men && !women && !under2500 && !under7500){
-      setData(item)
-    }
-
-    setLoading(false)
+    try {
+      const item = await client.fetch(`*[_type == 'product' && category match "* ${id} *"]{
+      status,
+      "imageUrl": image.asset->url,
+      colors,
+      _id,
+      category,
+      description,
+      inventory,
+      productName,
+      price,
+      discountPercentage,
+      rating,
+      ratingCount,
+    
+    }`);
+        if(men===true){
+          setData(item.filter((product: Product) => product.category.includes('Men')))
+        } if(women===true){
+          setData(item.filter((product: Product) => product.category.includes('Women')))
+        } if(under2500===true){
+          setData(item.filter((product: Product) => product.price <= 2500))
+        } if(under7500===true){
+          setData(item.filter((product: Product) => product.price <= 7500 ))
+        }if(!men && !women && !under2500 && !under7500){
+          setData(item)
+        }
+    
+        setLoading(false)
+      
+    } catch (error) {
+      console.error(error)
+      throw new Error('Check Your internet Connection!')    }
   }
 
   function ratingSystem(Rating: number) {
@@ -128,6 +133,7 @@ export default function Products({ params: { id } }: PageProps) {
           <ProductSkeleton/>
           <ProductSkeleton/>
           <ProductSkeleton/>
+          {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
           </div>}
         {!loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
           {/* Product 01 */}

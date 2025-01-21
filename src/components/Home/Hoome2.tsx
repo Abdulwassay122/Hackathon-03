@@ -5,7 +5,7 @@ import arrowleft from "./assets/Vector (8).svg";
 import arrowright from "./assets/Vector (9).svg";
 import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
-import ProductSkeleton from '../Loader/ProductSkeleLoader';
+import ProductSkeleton from '../Loader/Home2SkeleLoader';
 
 
 interface Product {
@@ -36,23 +36,28 @@ export default function Hoome2() {
     })
 
     async function fetchApi(){
-    const item = await client.fetch(`*[_type == 'product' && productName match "* Air *"]{
-  status,
-  "imageUrl": image.asset->url,
-  colors,
-  _id,
-  category,
-  description,
-  inventory,
-  productName,
-  price,
-  discountPercentage,
-  rating,
-  ratingCount,
-  sizes
-}`)
-setData(item)
-setLoading(false)
+      try {
+        const item = await client.fetch(`*[_type == 'product' && productName match "* Air *"]{
+      status,
+      "imageUrl": image.asset->url,
+      colors,
+      _id,
+      category,
+      description,
+      inventory,
+      productName,
+      price,
+      discountPercentage,
+      rating,
+      ratingCount,
+      sizes
+    }`)
+    setData(item)
+    setLoading(false)
+        
+      } catch (error) {
+        console.error(error)
+        throw new Error('Check Your internet Connection!')}
     }
 
     const handleNext = () => {
@@ -84,7 +89,8 @@ setLoading(false)
         {/* Item List */}
         <div className='pt-[30px] flex gap-3 overflow-x-auto scrollbar-hidden'>
             {/* Item 01 */}
-            {loading && <div>
+            {loading && <div className='flex gap-3'>
+          <ProductSkeleton/>
           <ProductSkeleton/>
           <ProductSkeleton/>
           <ProductSkeleton/>

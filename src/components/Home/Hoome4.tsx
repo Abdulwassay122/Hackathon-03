@@ -5,7 +5,7 @@ import arrowright from "./assets/Vector (9).svg";
 import Image from "next/image";
 import { client } from '@/sanity/lib/client';
 import Link from 'next/link';
-import ProductSkeleton from '../Loader/ProductSkeleLoader';
+import ProductSkeleton from '../Loader/Home4SkeleLoader';
 interface Product {
     productName: string;
     status: string;
@@ -37,40 +37,45 @@ export default function Hoome4() {
     })
 
     async function fetchApi(){
-    const menDataa = await client.fetch(`*[_type == 'product' && category match "* Men's *"]{
-  status,
-  "imageUrl": image.asset->url,
-  colors,
-  _id,
-  category,
-  description,
-  inventory,
-  productName,
-  price,
-  discountPercentage,
-  rating,
-  ratingCount,
-  
-}
-`)
-    const womenDataa = await client.fetch(`*[_type == 'product' && category match "* Women's *"]{
-  status,
-  "imageUrl": image.asset->url,
-  colors,
-  _id,
-  category,
-  description,
-  inventory,
-  productName,
-  price,
-  discountPercentage,
-  rating,
-  ratingCount,
-  
-}`)
-
-    setMenData(menDataa)
-    setWomenData(womenDataa)
+        try {
+            const menDataa = await client.fetch(`*[_type == 'product' && category match "* Men's *"]{
+          status,
+          "imageUrl": image.asset->url,
+          colors,
+          _id,
+          category,
+          description,
+          inventory,
+          productName,
+          price,
+          discountPercentage,
+          rating,
+          ratingCount,
+          
+        }
+        `)
+            const womenDataa = await client.fetch(`*[_type == 'product' && category match "* Women's *"]{
+          status,
+          "imageUrl": image.asset->url,
+          colors,
+          _id,
+          category,
+          description,
+          inventory,
+          productName,
+          price,
+          discountPercentage,
+          rating,
+          ratingCount,
+          
+        }`)
+        
+            setMenData(menDataa)
+            setWomenData(womenDataa)
+            
+        } catch (error) {
+            console.error(error)
+            throw new Error('Check Your internet Connection!')        }
     }
     function onclick(){
         if (menData && menSlide < menData.length - 1) {
@@ -99,10 +104,14 @@ export default function Hoome4() {
                 </button>
             </div>
             {/* items list */}
-            {loading && <ProductSkeleton/>}
-            {!loading && <div className='flex md:w-[666px] w-[333px] overflow-hidden 1400:pl-12  pr-[6px] gap-3 pb-14'>
+            <div className='flex md:w-[666px] w-[333px] overflow-hidden 1400:pl-12  pr-[6px] gap-3 pb-14'>
+            {loading && <div className='flex gap-3'>
+                <ProductSkeleton/>
+                <ProductSkeleton/>
+                </div>
+                }
                 {/* item 01 */}
-                {menData?.map((ele)=>{ return (
+                {!loading && menData?.map((ele)=>{ return (
                     <Link key={ele._id} href={`/productdetail/${ele._id}`}><div className={`min-w-[300px] -translate-x-[px] h-[393px] transition-transform duration-300 flex flex-col gap-[21px]`} style={{
                         transform: `translateX(-${menSlide * 100}%)`,
                       }}>
@@ -117,7 +126,7 @@ export default function Hoome4() {
                         <p className='text-[15px] leading-6 font-[400] text-[#757575] w-[180px]'>{ele.category}</p>
                     </div>
                 </div></Link>)})}
-            </div>}
+            </div>
         </div>
         {/* woMen Items list */}
         <div key={'women'} className='flex flex-col gap-3 1284:items-end items-center'>
@@ -132,10 +141,13 @@ export default function Hoome4() {
                 </button>
             </div>
             {/* items list */}
-            {loading && <ProductSkeleton/>}
-            {!loading && <div className='flex 1400:pl-12 md:w-[666px] w-[333px] overflow-hidden    pr-[6px] gap-3 pb-14'>
+            <div className='flex 1400:pl-12 md:w-[666px] w-[333px] overflow-hidden    pr-[6px] gap-3 pb-14'>
+            {loading && <div className='flex gap-3'>
+                <ProductSkeleton/>
+                <ProductSkeleton/>
+                </div>}
                 {/* item 01 */}
-                {womenData?.map((ele)=>{return( 
+                {!loading && womenData?.map((ele)=>{return( 
                     <Link key={ele._id} href={`/productdetail/${ele._id}`}><div className={`min-w-[300px] h-[393px] transition-transform duration-300 flex flex-col gap-[21px]`} style={{
                         transform: `translateX(-${womenSlide * 100}%)`,
                       }}>
@@ -150,7 +162,7 @@ export default function Hoome4() {
                         <p className='text-[15px] leading-6 font-[400] text-[#757575] w-[180px]'>{ele.category}</p>
                     </div>
                 </div></Link>)})}
-            </div>}
+            </div>
         </div>
 
         </div>
