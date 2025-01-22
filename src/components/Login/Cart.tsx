@@ -57,8 +57,8 @@ console.log(data.length)
               {data.map((item, index)=>{
 
                return(<Link href={`/productdetail/${item.productId}`}> <div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>
-                <div className='sm:h-[170px] sm:flex-row flex-col flex sm:gap-[30px]'>
-                    <Image width={100} height={100} className='h-[150px] w-auto' src={item.image} alt="" />
+                <div className='sm:h-[170px] py-5 sm:flex-row flex-col flex sm:gap-[30px] items-center'>
+                    <Image width={100} height={100} className='h-auto w-[200px]' src={item.image} alt="" />
                     <div className='flex gap-4 sm:flex-row flex-col justify-between sm:w-[537px] pt-2'>
                       <div className=''>
                           <p className='text-[15px] leading-7'>{item.productName}</p>
