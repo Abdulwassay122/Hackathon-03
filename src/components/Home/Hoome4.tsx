@@ -90,7 +90,7 @@ export default function Hoome4() {
   return (
     <section className='px-12 flex flex-col gap-[25px]'>
         <h2 className='text-[23px] leading-7 font-[500]'>Gear Up</h2>
-        <div className='flex 1284:flex-row flex-col  justify-between'>
+        <div className='flex 1284:flex-row flex-col gap-4  justify-between'>
         {/* Men Items list */}
         <div key={'men'} className='flex flex-col gap-3  1284:items-end items-center relative'>
             {/* top button */}
@@ -104,7 +104,7 @@ export default function Hoome4() {
                 </button>
             </div>
             {/* items list */}
-            <div className='flex md:w-[666px] w-[333px] overflow-hidden 1400:pl-12  pr-[6px] gap-3 pb-14'>
+            <div className='flex 1400:w-[648px] md:w-[604px] w-[300px] overflow-hidden 1400:pl-12  pr-[6px] gap-3 pb-14'>
             {loading && <div className='flex gap-3'>
                 <ProductSkeleton/>
                 <ProductSkeleton/>
@@ -141,7 +141,7 @@ export default function Hoome4() {
                 </button>
             </div>
             {/* items list */}
-            <div className='flex 1400:pl-12 md:w-[666px] w-[333px] overflow-hidden    pr-[6px] gap-3 pb-14'>
+            <div className='flex 1400:pl-12 1400:w-[648px] md:w-[604px] w-[300px] overflow-hidden    pr-[6px] gap-3 pb-14'>
             {loading && <div className='flex gap-3'>
                 <ProductSkeleton/>
                 <ProductSkeleton/>

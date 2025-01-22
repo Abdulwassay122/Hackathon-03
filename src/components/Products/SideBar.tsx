@@ -27,7 +27,7 @@ export default function SideBar() {
   return (
     <div>
       {/* sidebar */}
-      <div className="w-[260px] h-full  flex-col gap-10 pr-5 lg:flex hidden">
+      <div className="w-[260px] h-full  flex-col gap-10 pr-5 flex">
           <div className="w-[192px] h-[400.72px] flex flex-col gap-[14.59px] overflow-y-auto scrollbar-hidden">
             <Link href="/products/productbytag/Shoes"><p className="text-[15px] leading-[21.6px] font-[500]">Shoes</p></Link>
             {/* <Link href=""><p className="text-[15px] leading-[21.6px] font-[500]">

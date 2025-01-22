@@ -12,6 +12,8 @@ import SideBar from "./SideBar";
 import { useCartContext } from "@/app/Contexts/CartContext";
 import ProductSkeleton from "../Loader/ProductSkeleLoader";
 import FallBack from "../Loader/FallBack";
+import hamburger from "./assets/burger-menu-svgrepo-com.svg";
+import cross from "./assets/cross-svgrepo-com.svg";
 
 interface Product {
   productName: string;
@@ -38,6 +40,7 @@ export default function Products() {
 
   const [data, setData] = useState<Product[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [toggle, setToggle] = useState<boolean>(false);
   const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
@@ -111,11 +114,15 @@ export default function Products() {
     return <div className="flex gap-1">{stars}</div>;
   }
   return (
-    <section className="pt-[76px] 1400:px-12 sm:px-8 px-5 flex flex-col gap-4">
+    <section className="pt-[76px] 1400:px-12 sm:px-8 450:px-5 px-2 flex flex-col gap-4">
       {/* header */}
       <div className="flex justify-between items-center">
+        <div className="flex gap-4">
+        <Image className={`h-8 w-8 lg:hidden block ${toggle?'hidden':''}`} onClick={()=>setToggle(true)} src={hamburger} alt="" />
+        <Image className={`h-8 w-8 lg:hidden block ${toggle?'':'hidden'}`} onClick={()=>setToggle(false)} src={cross} alt="" />
         <p className="text-[24px] leading-8 font-[500]">New (500)</p>
-        <div className="flex gap-6">
+        </div>
+        <div className="sm:flex hidden gap-6">
           <div className="flex gap-2">
             <p className="text-[16px] leading-7 text-center">Hide Filters</p>
             <Image src={filter} alt="" />
@@ -126,12 +133,14 @@ export default function Products() {
           </div>
         </div>
       </div>
-      <div className="flex">
+      <div className="flex overflow-hidden">
         {/* sidebar */}
-        <SideBar />
+        <div className={`${toggle?'translate-x-0':'-translate-x-[292px]'} transition-transform duration-200 z-10 bg-white lg:translate-x-0 lg:relative absolute`}>
+          <SideBar/>
+        </div>
         {/* Products */}
         {loading && (
-          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
+          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 w-full gap-4 pb-[140px] border-b-[1px] border-solid">
             <ProductSkeleton />
             <ProductSkeleton />
             <ProductSkeleton />
@@ -140,10 +149,10 @@ export default function Products() {
             <ProductSkeleton />
           </div>
         )}
-        {data?.length===0 ? <div className="h-full w-full flex mt-10 items-center justify-center text-[18px]">No items found!</div>:''}
+        {data?.length===0 ? <div className="lg:h-full w-full h-screen flex mt-10 items-center justify-center text-[18px]">No items found!</div>:''}
         {error?<FallBack/>:''}
-        {!loading && (
-          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
+        {!loading && !error && data?.length!==0 && (
+          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] justify-items-center w-[100%] border-solid">
             {/* Product 01 */}
             {data?.map((item, index) => (
               <Link

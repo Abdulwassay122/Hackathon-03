@@ -73,8 +73,8 @@ export default function Hoome2() {
       };
 
   return (
-    <section className='h-[604.36px] pl-12'>
-        <div className='flex justify-between sm:flex-row flex-col pr-12 sm:gap-0 gap-4 sm:items-center'>
+    <section className='h-[604.36px] md:pl-12 pl-4'>
+        <div className='flex justify-between 450:flex-row flex-col pr-12 sm:gap-0 gap-4 450:items-center'>
             <h3 className='text-[22px] leading-7 font-[600]'>Best of Air Max</h3>
             <div className='flex gap-3 items-center'>
                 <p className='text-[15px] leading-6 font-[500]'>Shop</p>

@@ -12,6 +12,8 @@ import SideBar from "@/components/Products/SideBar";
 import { useCartContext } from "@/app/Contexts/CartContext";
 import ProductSkeleton from "@/components/Loader/ProductSkeleLoader";
 import FallBack from "@/components/Loader/FallBack";
+import hamburger from "./assets/burger-menu-svgrepo-com.svg";
+import cross from "./assets/cross-svgrepo-com.svg";
 
 interface Product {
   productName: string;
@@ -45,7 +47,8 @@ export default function Products({ params: { id } }: PageProps) {
 
   const[data, setData] = useState<Product[]>()
   const[loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<unknown>(null);
+  const [toggle, setToggle] = useState<boolean>(false);
   
 
   useEffect(()=>{
@@ -113,11 +116,15 @@ export default function Products({ params: { id } }: PageProps) {
   }
   return (
     <>
-    <section className="pt-[76px] 1400:px-12 sm:px-8 px-5 flex flex-col gap-4">
+    <section className="pt-[76px] 1400:px-12 sm:px-8 450:px-5 px-2 flex flex-col gap-4">
       {/* header */}
       <div className="flex justify-between items-center">
+        <div className="flex gap-4">
+        <Image className={`h-8 w-8 lg:hidden block ${toggle?'hidden':''}`} onClick={()=>setToggle(true)} src={hamburger} alt="" />
+        <Image className={`h-8 w-8 lg:hidden block ${toggle?'':'hidden'}`} onClick={()=>setToggle(false)} src={cross} alt="" />
         <p className="text-[24px] leading-8 font-[500]">New (500)</p>
-        <div className="flex gap-6">
+        </div>
+        <div className=" sm:flex hidden gap-6">
           <div className="flex gap-2">
             <p className="text-[16px] leading-7 text-center">Hide Filters</p>
             <Image src={filter} alt="" />
@@ -128,79 +135,98 @@ export default function Products({ params: { id } }: PageProps) {
           </div>
         </div>
       </div>
-      <div className="flex">
+      <div className="flex overflow-hidden">
         {/* sidebar */}
-        <SideBar/>
+        <div className={`${toggle?'translate-x-0':'-translate-x-[292px]'} transition-transform duration-200 z-10 bg-white lg:translate-x-0 lg:relative absolute`}>
+          <SideBar/>
+        </div>
         {/* Products */}
-        {loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
-          <ProductSkeleton/>
-          <ProductSkeleton/>
-          <ProductSkeleton/>
-          <ProductSkeleton/>
-          <ProductSkeleton/>
-          <ProductSkeleton/>
-          </div>}
-          {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
-          {error?<FallBack/>:''}
-        {!loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
-          {/* Product 01 */}
-          {data?.map((item,index) => (
-            <Link
-              key={index}
-              className="shadow-md"
-              href={`/productdetail/${item._id}`}
-            >
-              <div className="w-[348px] h[533px]">
-                <div className="relative">
-                  <Image
-                    className="h-full w-full"
-                    height={400}
-                    width={400}
-                    src={item.imageUrl}
-                    alt=""
-                  />
-                <p className='absolute bg-gray-700 rounded-full text-white top-2 right-2 px-2 text-[11px]'>-{item.discountPercentage}%</p>
-                </div>
-                <div className="pt-[9px] pb-[22px] flex flex-col gap-5 px-4">
-                  <div>
-                    <p className="text-[15px] leading-7 font-[500] text-[#9E3500]">
-                      {item.status}
+        {loading && (
+          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 w-full gap-4 pb-[140px] border-b-[1px] border-solid">
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+          </div>
+        )}
+        {data?.length===0 ? <div className="lg:h-full w-full h-screen flex mt-10 items-center justify-center text-[18px]">No items found!</div>:''}
+        {error?<FallBack/>:''}
+        {!loading && !error && data?.length!==0 && (
+          <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] justify-items-center w-[100%] border-solid">
+            {/* Product 01 */}
+            {data?.map((item, index) => (
+              <Link
+                key={index}
+                className="shadow-md"
+                href={`/productdetail/${item._id}`}
+              >
+                <div className="w-[348px] h[533px]">
+                  <div className="relative">
+                    <Image
+                      className="h-full w-full"
+                      height={400}
+                      width={400}
+                      src={item.imageUrl}
+                      alt=""
+                    />
+                    <p className="absolute bg-gray-700 rounded-full text-white top-2 right-2 px-2 text-[11px]">
+                      -{item.discountPercentage}%
                     </p>
-                    <p className="text-[15px] leading-6 font-[500] text-[#111111]">
-                      {item.productName}
-                    </p>
-                    <p className="text-[15px] leading-6 text-[#757575]">
-                      {item.category}
-                    </p>
-                    <div className="flex flex-row gap-2">
-                      <p className="text-[15px] leading-6  text-[#757575]">
-                        Colors :
-                      </p>
-                      {item.colors.map((ele, index) => {
-                        return (
-                          <p key={index} className="text-[15px] leading-6  text-[#757575]">
-                            {ele}
-                          </p>
-                        );
-                      })}
-                    </div>
                   </div>
-                  <div className="flex justify-between items-start">
+                  <div className="pt-[9px] pb-[22px] flex flex-col gap-5 px-4">
                     <div>
-                        <s className="text-[15px] leading-7 font-[500] text-red-400">MRP : ₹ {data? ((item?.price)/(1-(item.discountPercentage/100))).toFixed(2):''}</s>
-                        <p className="text-[18px] leading-7 font-[500] text-[#111111]">{`MRP : ₹ ${item.price}`}</p>
+                      <p className="text-[15px] leading-7 font-[500] text-[#9E3500]">
+                        {item.status}
+                      </p>
+                      <p className="text-[15px] leading-6 font-[500] text-[#111111]">
+                        {item.productName}
+                      </p>
+                      <p className="text-[15px] leading-6 text-[#757575]">
+                        {item.category}
+                      </p>
+                      <div className="flex flex-row gap-2">
+                        <p className="text-[15px] leading-6  text-[#757575]">
+                          Colors :
+                        </p>
+                        {item.colors.map((ele, index) => {
+                          return (
+                            <p
+                              key={index}
+                              className="text-[15px] leading-6  text-[#757575]"
+                            >
+                              {ele}
+                            </p>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <div className="flex gap-1 justify-end items-center mr-2">
-                      {ratingSystem(item.rating)}
-                      <p className="text-[15px] leading-6  text-[#757575]">{`(${item.ratingCount})`}</p>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <s className="text-[15px] leading-7 font-[500] text-red-400">
+                          MRP : ₹{" "}
+                          {data
+                            ? (
+                                item?.price /
+                                (1 - item.discountPercentage / 100)
+                              ).toFixed(2)
+                            : ""}
+                        </s>
+                        <p className="text-[18px] leading-7 font-[500] text-[#111111]">{`MRP : ₹ ${item.price}`}</p>
+                      </div>
+                      <div className="flex gap-1 justify-end items-center mr-2">
+                        {ratingSystem(item.rating)}
+                        <p className="text-[15px] leading-6  text-[#757575]">{`(${item.ratingCount})`}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>}
-              </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
       {/*  Bottom Tags*/}
       <div className="py-16 flex flex-col gap-6 xl:pl-[300px] lg:pl-[150px] md:pl-[50px] pl-8">
         <h2 className="text-[19px] leading-6 font-[500]">Related Categories</h2>

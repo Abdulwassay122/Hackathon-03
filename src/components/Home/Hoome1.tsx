@@ -10,7 +10,7 @@ export default function Hoome1() {
         <h3 className='text-[15px] leading-4 text-center font-semibold'>Hello Nike App</h3>
         <p className='text-[11px] leading-6 text-center'>Download the app to access everything Nike. Get Your Great</p>
       </div>
-      <div className='px-9 w-full items-center flex flex-col gap-12'>
+      <div className='px-4 w-full items-center flex flex-col gap-12'>
         <div>
             <Image src={img} alt="" />
         </div>

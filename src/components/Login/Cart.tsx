@@ -38,7 +38,7 @@ for(let i=0; i<data.length; i++){
 
 console.log(data.length)
   return (
-    <section className='pt-10 pb-[85px] xl:pl-[198px] sm:pl-[48px]  px-10 xl:pr-[115px] sm:pr-[48px] flex 1160:flex-row flex-col sm:gap-2 gap-10 font-inter'>
+    <section className='pt-10 pb-[85px] xl:pl-[198px] sm:pl-[48px]  px-4 xl:pr-[115px] sm:pr-[48px] flex 1160:flex-row flex-col sm:gap-2 gap-10 font-inter'>
         <div className='flex flex-col gap-4'>
             <div className='bg-[#F7F7F7] h-[63px] flex justify-between items-center gap-1 px-2 pt-[14px] pb-[7px] w-full pl-2'>
                 <div className='flex flex-col gap-1'>
@@ -53,7 +53,7 @@ console.log(data.length)
             <div className=''>
               <h2 className='text-[22px] leading-[33px] font-[500] md:w-[717px]'>Bag</h2>
 
-              {data.length === 0 ? <div className=' w-full flex items-center sm:h-[218px] justify-center'>No Item</div>:''}
+              {data.length === 0 ? <div className=' w-full flex items-center h-[218px] justify-center'>No Item</div>:''}
               {data.map((item, index)=>{
 
                return(<Link href={`/productdetail/${item.productId}`}> <div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Hoome3() {
   return (
-    <section className='px-12 py-[84px] flex flex-col gap-12'>
+    <section className='md:px-12 px-4 py-[84px] flex flex-col gap-12'>
         <div className='flex flex-col gap-[25px]'>
             <h4 className='text-[23px] leading-7 font-[500]'>Featured</h4>
             <Image className='w-full h-auto' src={image} alt="" />

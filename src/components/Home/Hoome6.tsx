@@ -10,7 +10,7 @@ export default function Hoome6() {
     <section className='sm:px-[42px] px-3 flex flex-col gap-[84px]'>
         <div className='flex flex-col gap-6 overflow-hidden'>
             <h3 className='text-[23px] leading-7 font-[500]'>The Essentials</h3>
-            <div className='pl-[6px] flex gap-3 1400:overflow-visible overflow-x-auto justify-between'>
+            <div className='pl-[6px] flex md:flex-row flex-col gap-3 items-center 1400:overflow-visible overflow-x-auto justify-between'>
                 <Link href="/products/productbytag/Men's"><Image src={img1} alt="" /></Link>
                 <Link href="/products/productbytag/Women's"><Image src={img2} alt="" /></Link>
                 <Link href="/products"><Image src={img3} alt="" /></Link>
