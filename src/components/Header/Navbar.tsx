@@ -79,7 +79,7 @@ export default function Navbar() {
         </div>
       </div>
         <div className='relative mx-10 lg:hidden block mb-4'>
-                <input className='bg-[#F5F5F5] w-full pl-10 h-10 rounded-full text-[#CCCCCC]' placeholder='Search' type="text" />
+                <input value={search} onChange={handleChange} className='bg-[#F5F5F5] w-full pl-10 h-10 rounded-full text-[#CCCCCC]' placeholder='Search' type="text" />
                 <Image className='absolute left-2 top-2 ' src={searchh} alt="" />
             </div>
     </header>
