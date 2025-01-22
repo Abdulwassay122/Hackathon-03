@@ -11,6 +11,7 @@ import graystarhalf from "./assets/graystarhalf.svg";
 import SideBar from "@/components/Products/SideBar";
 import { useCartContext } from "@/app/Contexts/CartContext";
 import ProductSkeleton from "@/components/Loader/ProductSkeleLoader";
+import FallBack from "@/components/Loader/FallBack";
 
 interface Product {
   productName: string;
@@ -44,6 +45,8 @@ export default function Products({ params: { id } }: PageProps) {
 
   const[data, setData] = useState<Product[]>()
   const[loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<unknown>(null);
+  
 
   useEffect(()=>{
     fetchApi()
@@ -79,9 +82,12 @@ export default function Products({ params: { id } }: PageProps) {
     
         setLoading(false)
       
-    } catch (error) {
-      console.error(error)
-      throw new Error('Check Your internet Connection!')    }
+    } catch (err) {
+      console.error(err)
+      setError(err)
+      setLoading(false)
+      throw new Error('Check Your internet Connection!')
+      }
   }
 
   function ratingSystem(Rating: number) {
@@ -133,8 +139,9 @@ export default function Products({ params: { id } }: PageProps) {
           <ProductSkeleton/>
           <ProductSkeleton/>
           <ProductSkeleton/>
-          {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
           </div>}
+          {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
+          {error?<FallBack/>:''}
         {!loading && <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
           {/* Product 01 */}
           {data?.map((item,index) => (

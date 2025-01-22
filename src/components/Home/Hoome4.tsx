@@ -33,7 +33,6 @@ export default function Hoome4() {
 
     useEffect(()=>{
         fetchApi()
-        setLoading(false)
     })
 
     async function fetchApi(){
@@ -72,6 +71,7 @@ export default function Hoome4() {
         
             setMenData(menDataa)
             setWomenData(womenDataa)
+            setLoading(false)
             
         } catch (error) {
             console.error(error)

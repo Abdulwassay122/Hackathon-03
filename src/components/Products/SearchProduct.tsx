@@ -11,6 +11,7 @@ import graystarhalf from "./assets/graystarhalf.svg";
 import SideBar from "./SideBar";
 import { useCartContext } from "@/app/Contexts/CartContext";
 import ProductSkeleton from "../Loader/ProductSkeleLoader";
+import FallBack from "../Loader/FallBack";
 
 interface Product {
   productName: string;
@@ -38,6 +39,8 @@ export default function SearchProducts({search}:{search:string}) {
 
   const[data, setData] = useState<Product[]>()
   const[loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<unknown>(null);
+  
 
   useEffect(()=>{
     fetchApi()
@@ -74,9 +77,11 @@ export default function SearchProducts({search}:{search:string}) {
         console.log('object',search.replace(/%20/g,' '))
         setLoading(false)
       
-    } catch (error) {
-      console.error(error)
-      throw new Error('Check Your internet Connection!')  
+    } catch (err) {
+      console.error(err)
+      setError(err)
+      setLoading(false)
+      throw new Error('Check Your internet Connection!')   
     }
   }
 
@@ -130,6 +135,7 @@ export default function SearchProducts({search}:{search:string}) {
           <ProductSkeleton/>
           </div>}
           {data?.length===0 ? <div className="h-full w-full flex items-center mt-10 justify-center text-[18px]">No items found!</div>:''}
+          {error?<FallBack/>:''}
         <div className="grid 1400:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 pb-[140px] border-b-[1px] border-solid">
           {/* Product 01 */}
           {!loading && data?.map((item,index) => (
