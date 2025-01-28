@@ -5,17 +5,19 @@ import wishlist from './assets/Frame (14).svg';
 import deletee from './assets/Frame (15).svg'
 import Link from 'next/link'
 import { useCartContext } from "@/app/Contexts/CartContext";
-
-
+import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from "react-toastify";
 
 
 export default function Cart() {
+  
+  const router = useRouter();
 
   const cartContext = useCartContext();
   if (!cartContext) {
     return <div>Loading...</div>;
   }
-  const { cart, setCart, removeFromCart } = cartContext;
+  const { cart, setCart, removeFromCart, authToken } = cartContext;
   
   useEffect(() => {
       const savedCart = sessionStorage.getItem('cart');
@@ -28,17 +30,30 @@ export default function Cart() {
       sessionStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
+    
+    function checkOut(){
+      if(authToken.length === 0 ){
+        router.push('/login')
+      }else if(cart.length === 0 ){
+        toast.warning("Cart is Empty !", {
+        position: "top-center",
+        autoClose: 2000,
+        })
+      }else{
+        router.push(`/checkout`)
+      }
+    }
+
 
   const data = cart
 let subTotal = 0 
 for(let i=0; i<data.length; i++){
   subTotal += data ? Number(data[i].totalprice) : 0
-  // console.log(i)
 }
 
-console.log(data.length)
   return (
-    <section className='pt-10 pb-[85px] xl:pl-[198px] sm:pl-[48px]  px-4 xl:pr-[115px] sm:pr-[48px] flex 1160:flex-row flex-col sm:gap-2 gap-10 font-inter'>
+    <section className='pt-10 pb-[85px] xl:pl-[198px] sm:pl-[48px]  px-10 xl:pr-[115px] sm:pr-[48px] flex 1160:flex-row flex-col sm:gap-2 gap-10 font-inter'>
+        <ToastContainer />
         <div className='flex flex-col gap-4'>
             <div className='bg-[#F7F7F7] h-[63px] flex justify-between items-center gap-1 px-2 pt-[14px] pb-[7px] w-full pl-2'>
                 <div className='flex flex-col gap-1'>
@@ -53,15 +68,15 @@ console.log(data.length)
             <div className=''>
               <h2 className='text-[22px] leading-[33px] font-[500] md:w-[717px]'>Bag</h2>
 
-              {data.length === 0 ? <div className=' w-full flex items-center h-[218px] justify-center'>No Item</div>:''}
+              {data.length === 0 ? <div className=' w-full flex items-center h-[218px]  justify-center'>No Item</div>:''}
               {data.map((item, index)=>{
 
-               return(<Link href={`/productdetail/${item.productId}`}> <div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>
-                <div className='sm:h-[170px] py-5 sm:flex-row flex-col flex sm:gap-[30px] items-center'>
-                    <Image width={100} height={100} className='h-auto w-[200px]' src={item.image} alt="" />
+               return( <div key={index} className='md:w-[717px] sm:h-[218px] flex items-center border-b-[1px] border-solid'>
+                <div className='sm:h-[170px] sm:flex-row flex-col flex sm:gap-[30px]'>
+                    <Image width={100} height={100} className='h-[150px] w-auto' src={item.image} alt="" />
                     <div className='flex gap-4 sm:flex-row flex-col justify-between sm:w-[537px] pt-2'>
-                      <div className=''>
-                          <p className='text-[15px] leading-7'>{item.productName}</p>
+                          <div className=''>
+                          <Link href={`/productdetail/${item.productId}`}><p className='text-[15px] leading-7'>{item.productName}</p></Link>
                           <p className='text-[15px] text-[#757575] leading-7'>{item.category}</p>
                           <p className='text-[15px] text-[#757575] leading-7'>Color <span className='ml-[10px]'>{item.color}</span></p>
                           <div className='flex gap-12'>
@@ -76,7 +91,7 @@ console.log(data.length)
                         <p className='text-[15px] text-[#111111] leading-7'>{`₹ ${item.price*item.quantity}`}</p>
                     </div>
                 </div>
-              </div></Link>)})}
+              </div>)})}
             </div>
         </div>
 
@@ -96,7 +111,7 @@ console.log(data.length)
             <p className='text-[15px] text-[#111111] leading-7'>Total</p>
             <p className='text-[15px] text-[#111111] leading-7'>{`₹ ${subTotal.toFixed(2)}`}</p>
           </div>
-          <Link href="/checkout"><button className='sm:w-[334px] w-[300px] h-[60px] rounded-full mt-2 ml-2 bg-black text-[15px] text-[#ffffff] leading-7'>Member Checkout</button></Link>
+          <button onClick={checkOut} className='sm:w-[334px]  h-[60px] rounded-full mt-2 ml-2 bg-black text-[15px] text-[#ffffff] leading-7'>Member Checkout</button>
         </div>
     </section>
   )

@@ -25,6 +25,7 @@
   - **Product IDs**: List of product IDs in the order.
   - **Colors**: Selected color for each product.
   - **Sizes**: Selected size for each product.
+  - **Quantity**: Selected size for each product.
 
 ---
 

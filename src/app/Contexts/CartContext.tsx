@@ -24,6 +24,8 @@ interface CartContextType {
   setWomen: React.Dispatch<React.SetStateAction<boolean>>;
   isActive: number;
   setIsActive: React.Dispatch<React.SetStateAction<number>>;
+  authToken: string;
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -51,7 +53,7 @@ export function CartWrapper ({children}:{
   const [men, setMen] = useState<boolean>(false)
   const [women, setWomen] = useState<boolean>(false)
   const [isActive, setIsActive] = useState<number>(0)
-
+  const [authToken, setAuthToken] = useState<string>('')
 
   const addToCart = (item: cartItem) => {
   setCart((prevCart) => {
@@ -82,7 +84,7 @@ export function CartWrapper ({children}:{
   };
 
   return(
-    <CartContext.Provider value={{cart, setCart, addToCart, removeFromCart, clearCart, under2500, setunder2500, under7500, setunder7500, men, setMen, women, setWomen, isActive, setIsActive}}>
+    <CartContext.Provider value={{cart, setCart, addToCart, removeFromCart, clearCart, under2500, setunder2500, under7500, setunder7500, men, setMen, women, setWomen, isActive, setIsActive, authToken, setAuthToken}}>
       {children}
     </CartContext.Provider>
   )

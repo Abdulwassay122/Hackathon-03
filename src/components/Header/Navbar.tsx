@@ -11,16 +11,19 @@ import { useCartContext } from '@/app/Contexts/CartContext';
 import { useRouter } from 'next/navigation';
 import hamburger from "./assets/burger-menu-svgrepo-com.svg";
 import cross from "./assets/cross-svgrepo-com.svg";
+import profile from './assets/profile-user-svgrepo-com.svg'
+
 
 export default function Navbar() {
   const cartContext = useCartContext();
     if (!cartContext) {
       return <div>Loading...</div>;
     }
-    const { cart, isActive, setIsActive } = cartContext;
+    const { cart, isActive, setIsActive, authToken, setAuthToken } = cartContext;
     
     const [ search, setSearch ] = useState('');
-        const [toggle, setToggle] = useState<boolean>(false);
+    const [toggle, setToggle] = useState<boolean>(false);
+    const [toggle1, setToggle1] = useState<boolean>(false);
     
 
     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -29,14 +32,23 @@ export default function Navbar() {
     const router = useRouter();
 
     useEffect(()=>{
+      const token = localStorage.getItem('token')
+      if(token){
+        setAuthToken(token)
+      }
       if(search.length > 0 ){
         const some = () => {
           router.push(`/products/productsearch/${search.replace(/ /g, '%20')}`)
         }
         some();
-        console.log(search)
       }
-    },[search])
+    },[search, authToken])
+
+    function logout (){
+      localStorage.removeItem('token')
+      setAuthToken('')
+      router.push('/')
+    }
 
   return (
     <header className='relative '>
@@ -44,16 +56,32 @@ export default function Navbar() {
         <div className='h-6 w-6 flex justify-center items-center'>
             <Link href="/"><Image src={logo1} alt="" /></Link>
         </div>
-        <nav className='w-[272.81px] flex justify-center'>
+        <nav className='w-fit flex justify-center'>
             <ul className=' flex items-center'> 
                 <Link href="/about"><li className='text-[11px] leading-[14px] font-[500]'>Find a Store</li></Link>
                 <span className='ml-4 mr-[11px]'>|</span>
                 <Link href="/about"><li className='text-[11px] leading-[14px] font-[500]'>Help</li></Link>
+                {authToken.length === 0 
+                ?
+                 <>
                 <span className='ml-3 mr-[11px]'>|</span>
                 <Link href="/joinus"><li className='text-[11px] leading-[14px] font-[500]'>Join Us</li></Link>
                 <span className='ml-3 mr-[14px]'>|</span>
                 <Link href="/login"><li className='text-[11px] leading-[14px] font-[500]'>Sign In</li></Link>
-            </ul>
+                </>
+                 :
+                <>
+                <div className='mx-2 px-2 relative' onMouseEnter={()=>setToggle1(true)} onMouseLeave={()=>setToggle1(false)}>
+                  <Image className='h-4 w-4' src={profile} alt="" />
+                  {toggle1 && <ul className='py-4 flex flex-col gap-4 px-4 rounded-lg absolute z-40 w-40 top-4 shadow-md font-bold text-sm hover:text-[#525151] right-0 bg-[#F5F5F5]'>
+                    <Link href="/profile"><li className='hover:text-gray-500'>My Account</li></Link>
+                    <Link href="/orders"><li className='hover:text-gray-500'>Orders</li></Link>
+                    <li className='hover:text-gray-500 cursor-pointer' onClick={logout}>Logout</li>
+                  </ul>}
+                </div>
+                </>
+                }
+            </ul> 
         </nav>
       </div>
       <div className='w-full h-[60px] flex items-center px-10 gap-5 justify-between'>
@@ -80,8 +108,8 @@ export default function Navbar() {
             <div className='h-9 w-9 flex justify-center hover:bg-[#F5F5F5] rounded-full items-center'><Image src={wishlidt} alt="" /></div>
             <div className='h-9 w-9 flex justify-center hover:bg-[#F5F5F5] rounded-full items-center relative'><Link href="/cart"><Image src={cartt} alt="" /><p className='absolute top-3 left-[14px] text-[11px]'>{cart.length===0?'':cart.length}</p></Link></div>
             <Image className={`h-6 w-6 md:hidden block `} onClick={()=>setToggle(true)} src={hamburger} alt="" />
-            <nav className={`md:hidden block bg-[#F5F5F5] absolute h-screen top-0 right-0 px-10 py-5 z-10 transition-all duration-200 ${toggle?'translate-x-0':'translate-x-full'}`}>
-                <ul className=' text-[16px]  w-44 right-0 leading-6 font-[500] gap-7 flex flex-col  z-10 '>
+            <nav className={`md:hidden block bg-[#F5F5F5] absolute h-screen top-0 right-0 px-10 py-5 z-50 transition-all duration-200 ${toggle?'translate-x-0':'translate-x-full'}`}>
+                <ul className=' text-[16px]  w-44 right-0 leading-6 font-[500] gap-7 flex flex-col  z-50 '>
                     <Image className={`h-8 w-8 block`} onClick={()=>setToggle(false)} src={cross} alt="" />
                     <Link href="/products"><li onClick={()=>setIsActive(1)} className={`${isActive===1?'font-semibold border-b-2':''} border-solid  border-black`}>All Products</li></Link>
                     <Link href="/products/productbytag/Men's"><li onClick={()=>setIsActive(2)} className={`${isActive===2?'font-semibold border-b-2':''} w-full border-solid  border-black`}>Men</li></Link>
