@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { LoginSchema } from "@/Schemas/LoginSchema";
 import { NextRequest, NextResponse } from "next/server";
+require('dotenv').config();
 
 const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET as string;
 

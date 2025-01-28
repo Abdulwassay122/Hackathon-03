@@ -18,6 +18,8 @@ export default function page() {
             }
         const { setAuthToken } = cartContext;
 
+        const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET as string;
+        console.log("JWT_secret",JWT_SECRET)
 
         const router = useRouter();
         const[zoderror, setZoderror] = useState<z.ZodIssue[]>()
