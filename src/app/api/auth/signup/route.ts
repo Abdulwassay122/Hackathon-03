@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import  jwt  from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import nodemailer from "nodemailer";
 
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -22,7 +23,7 @@ export async function POST (req: NextRequest){
     const salt = await bcrypt.genSalt(11)
 
     const hashedPassword = await bcrypt.hash(password, salt)
-    try {    
+    try {
     
         // Check that user already exiists with the eamil
         const existingUser = await client.fetch(`*[_type == 'user' && email == $email][0]`,{email})
@@ -39,14 +40,34 @@ export async function POST (req: NextRequest){
             password:hashedPassword,
             gender,
             DOB:date,
+            isVerified:false
         })
         const user = {userId, email}
         const token = jwt.sign(
             { id: user.userId, email: user.email },
             JWT_SECRET,
-            { expiresIn: '90d' }
+            { expiresIn: '1h' }
           );
-        return NextResponse.json({success:true, message:'User create Successfully', token },{status:201})
+        console.log("Token : ",token)
+        // sent ding verification email
+        const transpoter = nodemailer.createTransport({
+            service:"gmail",
+            secure:true,
+            port:465,
+            auth:{
+                user:"awassay122598@gmail.com",
+                pass:"ifyc stul fzmw brvk",
+            },
+        })  
+        const mailOptions = {
+            from:process.env.EMAIL,
+            to:email,
+            subject:`Verify Your Email`,
+            html:`<p>Click <a href="${process.env.NEXT_PUBLIC_FRONTEND_URL}/verify?token=${token}">here</a> to verify your email.</p>`
+        } 
+        await transpoter.sendMail(mailOptions)
+
+        return NextResponse.json({success:true, message:'Verification email send. Check your email  '},{status:201})
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(

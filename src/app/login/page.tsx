@@ -9,6 +9,7 @@ import { LoginSchema } from '@/Schemas/LoginSchema';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from "react-toastify";
 import { useCartContext } from '../Contexts/CartContext';
+import { cookies } from 'next/headers';
 
 export default function page() {
         // context
@@ -18,15 +19,13 @@ export default function page() {
             }
         const { setAuthToken } = cartContext;
 
-        const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET as string;
-        console.log("JWT_secret",JWT_SECRET)
-
         const router = useRouter();
         const[zoderror, setZoderror] = useState<z.ZodIssue[]>()
         const[loading, setLoading] = useState<boolean>()
         const[email, setEmail] = useState<string>()
         const[password, setPassword] = useState<string>()
-
+        const[success, setSuccess] = useState<string>('')
+        
       const handleEmail = (e:ChangeEvent<HTMLInputElement>) => {
                 setEmail(e.target.value);
               };
@@ -35,6 +34,8 @@ export default function page() {
           };
 
         async function onnSubmit(e: FormEvent<HTMLFormElement>){
+          setZoderror([])
+          setSuccess('')
           e.preventDefault();
           if (!email || !password) {
             setZoderror([{ message: 'Fill all the fields.', code: 'custom', path: ['fields'] }])
@@ -51,13 +52,23 @@ export default function page() {
             })
 
             const res = await response.json()
-            if(response.status===201){
-                // setEmail('')
-                // setPassword('')
+            if(response.status===202){
+                setEmail('')
+                setPassword('')
+                setSuccess(res.message)
                 setZoderror([])
                 setLoading(false)
-                localStorage.setItem('token', res.token)
+                toast.success("Verification Email Sent.", {
+                  position: "bottom-left",
+                  autoClose: 3000,
+                });
+            }
+            if(response.status===200){
+                setSuccess(res.message)
+                setZoderror([])
+                setLoading(false)
                 setAuthToken(res.token)
+                // localStorage.setItem('token',res.token)
                 toast.success("Successfully Logged In.", {
                         position: "bottom-left",
                         autoClose: 3000,
@@ -65,7 +76,7 @@ export default function page() {
                 setTimeout(() => {
                   router.push('/')
                 }, 3000);
-            }else{
+            }else if(response.status !== 200 && response.status !== 202){
                 console.error(res.message)
                 setZoderror([{ message: res.message, code: 'custom', path: ['fields'] }])
                 setLoading(false)
@@ -94,17 +105,20 @@ export default function page() {
             </div>
             {loading? <div className='flex justify-center'><Image className='h-10 w-10' src={spinner} alt="" /></div>:''}
             <form onSubmit={onnSubmit} className='flex flex-col gap-6 items-center'>
-                <div className='flex justify-center'>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
+                <div className='flex justify-center w-[310px]'>{success && success.length > 0 ? 
+                        <p  className='text-[#56aa25] text-[14px]'>✅ { success }</p>
+                    :''}</div>
+                <div className='flex justify-center w-[310px]'>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
                     <p key={index} className='text-[#f14141] text-[14px]'>{ele.path[0] ==='fields'? ele.message:''}</p>
                 )}):''}</div>
                 <div className='flex flex-col gap-3'>
                 <div>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
-                    <p key={index} className='text-[#f14141] text-[12px]'>{ele.path[0] ==='email'? ele.message:''}</p>
+                    <p key={index} className='text-[#f14141] text-[12px] w-[310px]'>{ele.path[0] ==='email'? ele.message:''}</p>
                 )}):''}
                     <input value={email} onChange={handleEmail} className='w-[324px] h-10 text-[14px] border-[1px] border-solid rounded-[3px] px-4 border-[#E5E5E5]' placeholder='Email address' type="text" />
                     </div>
                     <div>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
-                    <p key={index} className='text-[#f14141] text-[12px]'>{ele.path[0] ==='password'? ele.message:''}</p>
+                    <p key={index} className='text-[#f14141] text-[12px] w-[310px]'>{ele.path[0] ==='password'? ele.message:''}</p>
                 )}):''}
                     <input value={password} onChange={handlePasseord} className='w-[324px] h-10 text-[14px] border-[1px] border-solid rounded-[3px] px-4 border-[#E5E5E5]' placeholder='Password' type="password" />
                     </div>

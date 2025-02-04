@@ -18,8 +18,8 @@ export const ordersSchema = {
         title: "Products list",
         type: "array",
         of: [{ 
-            type: "object",
-            fields:[
+          type: "object",
+          fields:[
               {
                 name: "orderStatus",
                 title: "Order Status",
@@ -53,7 +53,7 @@ export const ordersSchema = {
                 {
                     name:"quantity",
                     title:"Quantity",
-                    type:"string"
+                    type:"number"
                 },
                 {
                     name:"productName",

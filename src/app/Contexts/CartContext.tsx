@@ -57,11 +57,11 @@ export function CartWrapper ({children}:{
 
   const addToCart = (item: cartItem) => {
   setCart((prevCart) => {
-    const existingItem = prevCart.find((cartItem) => cartItem.productId === item.productId);
+    const existingItem = prevCart.find((cartItem) => cartItem.productId === item.productId && cartItem.size === item.size && cartItem.color === item.color);
     if (existingItem) {
       // Update the quantity and total price
       return prevCart.map((cartItem) =>
-        cartItem.productId === item.productId
+        cartItem.productId === item.productId && cartItem.size === item.size && cartItem.color === item.color
           ? {
               ...cartItem,
               quantity: cartItem.quantity + item.quantity,
@@ -74,6 +74,7 @@ export function CartWrapper ({children}:{
     return [...prevCart, item];
   });
 };
+  // localStorage.setItem('cart', JSON.stringify(cart))
 
   const removeFromCart = (itemId: string) => {
     setCart((prevCart) => prevCart.filter((item) => item.productId !== itemId));

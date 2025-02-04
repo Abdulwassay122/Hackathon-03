@@ -6,21 +6,14 @@ import spinner from './assets/Iphone-spinner-2.gif'
 import Link from 'next/link';
 import { UserSchema } from '@/Schemas/UserSchema';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from "react-toastify";
-import { useCartContext } from '../Contexts/CartContext';
+
+
 
 export default function JoinUs() {
-    // context
-            const cartContext = useCartContext();
-                if (!cartContext) {
-                  return <div>Loading...</div>;
-                }
-            const { setAuthToken } = cartContext;
-
-
-    const router = useRouter();
+   
     const[zoderror, setZoderror] = useState<z.ZodIssue[]>()
+    const[success, setSuccess] = useState<string>('')
     const[loading, setLoading] = useState<boolean>()
     const[name, setName] = useState<string>()
     const[email, setEmail] = useState<string>()
@@ -45,7 +38,7 @@ export default function JoinUs() {
         };
 
         async function onSubmit (e: FormEvent<HTMLFormElement>){
-
+            setSuccess('')
             setZoderror([])
             setLoading(true)
             e.preventDefault();
@@ -78,15 +71,16 @@ export default function JoinUs() {
                         setGender('')
                         setZoderror([])
                         setLoading(false)
-                        localStorage.setItem('token', res.token)
-                        setAuthToken(res.token)
-                        toast.success("Successfully Logged In.", {
+                        setSuccess(res.message)
+                        // localStorage.setItem('token', res.token)
+                        // setAuthToken(res.token)
+                        toast.success("Veification Email Send.", {
                         position: "bottom-left",
                         autoClose: 3000,
                         })  
-                        setTimeout(() => {
-                            router.push('/')
-                          }, 3000);
+                        // setTimeout(() => {
+                        //     router.push('/')
+                        //   }, 3000);
                     }else{
                         console.error(res.message)
                         setZoderror([{ message: res.message, code: 'custom', path: ['fields'] }])
@@ -97,6 +91,7 @@ export default function JoinUs() {
                 // return error.message
                 if (error instanceof z.ZodError) {
                     console.log(error.errors)
+                    setSuccess('')
                     setZoderror(error.errors)
                     setLoading(false)
                 } else {
@@ -117,7 +112,10 @@ export default function JoinUs() {
         {loading? <div className='flex justify-center'><Image className='h-10 w-10' src={spinner} alt="" /></div>:''}
         <form onSubmit={onSubmit} className='flex flex-col gap-6 items-center'>
             <div className='flex flex-col gap-3'>
-                <div className='flex justify-center'>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
+                <div className='flex justify-center'>{success && success.length > 0 ? 
+                    <p  className='text-[#56aa25] text-[14px]'>✅ { success }</p>
+                :''}</div>
+                <div className='flex justify-center w-[330px]'>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(
                     <p key={index} className='text-[#f14141] text-[14px]'>{ele.path[0] ==='fields'? ele.message:''}</p>
                 )}):''}</div>
                 <div>{zoderror && zoderror.length > 0 ? zoderror.map((ele,index)=>{return(

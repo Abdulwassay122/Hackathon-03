@@ -19,6 +19,11 @@ export const userSchema = {
         type: "string",
       },
       {
+        name: "isVerified",
+        title: "User Verified",
+        type: "boolean",
+      },
+      {
         name: "password",
         title: "Parrword",
         type: "string",

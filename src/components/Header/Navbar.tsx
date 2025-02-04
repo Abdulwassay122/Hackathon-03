@@ -32,10 +32,12 @@ export default function Navbar() {
     const router = useRouter();
 
     useEffect(()=>{
-      const token = localStorage.getItem('token')
-      if(token){
-        setAuthToken(token)
-      }
+      async function fetchToken() {
+        const res = await fetch("/api/auth/get-token");
+        const data = await res.json();
+        setAuthToken(data.token);
+    }
+    fetchToken();
       if(search.length > 0 ){
         const some = () => {
           router.push(`/products/productsearch/${search.replace(/ /g, '%20')}`)
@@ -44,10 +46,11 @@ export default function Navbar() {
       }
     },[search, authToken])
 
-    function logout (){
-      localStorage.removeItem('token')
+    async function logout (){
+      await fetch(`/api/auth/logout`)
+      // localStorage.removeItem('token')
       setAuthToken('')
-      router.push('/')
+      // router.push('/')
     }
 
   return (
@@ -61,7 +64,7 @@ export default function Navbar() {
                 <Link href="/about"><li className='text-[11px] leading-[14px] font-[500]'>Find a Store</li></Link>
                 <span className='ml-4 mr-[11px]'>|</span>
                 <Link href="/about"><li className='text-[11px] leading-[14px] font-[500]'>Help</li></Link>
-                {authToken.length === 0 
+                {authToken?.length === 0 
                 ?
                  <>
                 <span className='ml-3 mr-[11px]'>|</span>

@@ -20,14 +20,14 @@ export default function Cart() {
   const { cart, setCart, removeFromCart, authToken } = cartContext;
   
   useEffect(() => {
-      const savedCart = sessionStorage.getItem('cart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
+    const ccart = JSON.parse(localStorage.getItem('cart')||"{}")
+    if (ccart) {
+        setCart(ccart);
       }
     }, []);
     
     useEffect(() => {
-      sessionStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
     

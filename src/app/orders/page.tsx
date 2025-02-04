@@ -10,9 +10,12 @@ import OrderLoader from '@/components/Loader/OrderLoader';
 interface OrderSchema {
   orderId: string;
   userId: string;
-  products: {quantity: number;
+  paymentStatus:string;
+  products: {
+    quantity: number;
     productId: string;
     productName: string;
+    paymentStatus:string;
     description: string;
     category: string;
     price: number;
@@ -51,7 +54,6 @@ export default function page() {
                 const data = await client.fetch(`*[_type == 'orders' && userId == '${responseData.user.id}']`);
                 setOrders(data);
                 setLoading(false)
-                console.log(responseData);
               } catch (error) {
                 console.error('Error fetching protected data', error);
               }

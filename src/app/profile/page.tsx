@@ -23,7 +23,7 @@ const page = () => {
       if (!cartContext) {
         return <div>Loading...</div>;
       }
-      const { authToken } = cartContext;
+      const { authToken, setAuthToken } = cartContext;
 
       const[user, setUser]= useState<User>()
       const[loading, setLoading]= useState<boolean>(true)
@@ -39,6 +39,12 @@ const page = () => {
               },
             });
             const responseData = await response.json();
+            // if the token is expire or invalid will be is logged out 
+            if(responseData.message === 'Invalid or expired token'){
+                console.log(responseData.message)
+                await fetch(`/api/auth/logout`)
+                setAuthToken('')
+            }
             const data = await client.fetch(`*[_type == 'user' && userId == '${responseData.user.id}']`)
             setUser(data[0])
             setLoading(false)
