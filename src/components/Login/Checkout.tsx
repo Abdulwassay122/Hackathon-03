@@ -28,7 +28,7 @@ interface ProtectedDataResponse {
   }
 
 export default function Checkout() {
-    const ccart = JSON.parse(localStorage.getItem('cart')||"{}")
+    const ccart = JSON.parse(localStorage.getItem('cart') || "[]");
     const cartContext = useCartContext();
       if (!cartContext) {
         return <div>Loading...</div>;
@@ -63,7 +63,7 @@ export default function Checkout() {
     subTotal += datat ? Number(datat[i].totalprice) : 0
     }
 
-    // Sattes 
+    // Sattes
     const [active, setActive] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     
@@ -87,8 +87,9 @@ export default function Checkout() {
     })
 
     function onchangeeee(){
-        profile===false?setProfile(true):setProfile(false)
-    }
+        setProfile((prev) => !prev);
+    }   
+
 
     async function onSubmit(e:FormEvent<HTMLFormElement>){
         if(!name && !address && !postalCode && !locality && !state && !state && !country && !eamil && !phone){

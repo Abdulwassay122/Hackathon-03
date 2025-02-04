@@ -7,6 +7,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-01-27.acacia",
   });
 
+  export interface cartItem {
+    quantity: number;
+    productId: string;
+    productName: string;
+    description: string;
+    category: string;
+    price: number;
+    totalprice: number;
+    image: string;
+    color: string;
+    size: string;
+  }
+
 export async function POST(req:NextRequest) {
     const body = await req.json()
     const {sessionId, order, shipment, cart} = body
@@ -15,7 +28,7 @@ export async function POST(req:NextRequest) {
         if(session.payment_status === 'paid'){
             await client.create(order)
             await client.create(shipment)
-            cart.map(async(ele:any)=>{
+            cart.map(async(ele:cartItem)=>{
                 await client.patch(ele.productId).dec({inventory: 1}).commit();
             })
             return NextResponse.json({ Session: session.payment_status, message:'Order Placed Successfully' }, {status:200})
