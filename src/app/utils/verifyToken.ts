@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { NextRequest } from 'next/server';
 
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export function verifyToken(req:NextRequest) {
   const authHeader = req.headers.get('authorization');
@@ -16,6 +16,7 @@ export function verifyToken(req:NextRequest) {
     }
     return jwt.verify(token, JWT_SECRET);
   } catch (error) {
+    console.log(error)
     throw new Error('Invalid or expired token');
   }
 }

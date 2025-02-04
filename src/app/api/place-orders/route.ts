@@ -1,7 +1,11 @@
 import { client } from "@/sanity/lib/client";
 import { NextRequest, NextResponse } from "next/server";
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use your secret key
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-01-27.acacia",
+  });
 
 export async function POST(req:NextRequest) {
     const body = await req.json()
@@ -9,8 +13,8 @@ export async function POST(req:NextRequest) {
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         if(session.payment_status === 'paid'){
-            const orderResponse = await client.create(order)
-            const shipmentResponse = await client.create(shipment)
+            await client.create(order)
+            await client.create(shipment)
             cart.map(async(ele:any)=>{
                 await client.patch(ele.productId).dec({inventory: 1}).commit();
             })

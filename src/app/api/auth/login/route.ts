@@ -6,9 +6,10 @@ import nodemailer from "nodemailer";
 import { LoginSchema } from "@/Schemas/LoginSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST (req:NextRequest){
     

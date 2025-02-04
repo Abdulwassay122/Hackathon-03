@@ -9,7 +9,6 @@ import { LoginSchema } from '@/Schemas/LoginSchema';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from "react-toastify";
 import { useCartContext } from '../Contexts/CartContext';
-import { cookies } from 'next/headers';
 
 export default function page() {
         // context

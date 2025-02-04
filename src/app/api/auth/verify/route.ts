@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 export async function POST(req:NextRequest){
 
     const token = await req.json()
-    const JWT_SECRET= process.env.NEXT_PUBLIC_JWT_SECRET
+    const JWT_SECRET= process.env.JWT_SECRET
     
     try {
         if (!JWT_SECRET) {
@@ -44,6 +44,6 @@ export async function POST(req:NextRequest){
         return NextResponse.json({success:true, message:'Email Verified Successfully.', token:newToken },{status:200})
 
     } catch (error) {
-        return NextResponse.json({success:false, message:'Email Verification Failed'},{status:500})
+        return NextResponse.json({success:false, message:'Email Verification Failed', error},{status:500})
     }
 }

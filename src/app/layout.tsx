@@ -5,7 +5,6 @@ import { CartWrapper } from "./Contexts/CartContext";
 import Navbar from "@/components/Header/Navbar";
 import Footer from "@/components/Footer/Footer";
 import TopLoadingBar from "@/components/Loader/TopLoadingBar";
-import { usePathname } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

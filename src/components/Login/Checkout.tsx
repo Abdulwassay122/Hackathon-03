@@ -16,7 +16,6 @@ import img11 from './assets/Image (22).svg'
 import { useCartContext } from '@/app/Contexts/CartContext';
 import { v4 as uuidv4 } from 'uuid';
 import { client } from '@/sanity/lib/client';
-import { ToastContainer, toast } from "react-toastify";
 
 interface ProtectedDataResponse {
     message: string;
@@ -149,7 +148,7 @@ export default function Checkout() {
             if(profile){
                 const userId = data?.user.id;
                 const doc = await client.fetch(`*[_type == "user" && userId == $userId][0]`,{userId})
-                const userResponse  = await client.patch(`${doc._id}`).set({address:address}).set({phoneNo:phone}).commit()
+                await client.patch(`${doc._id}`).set({address:address}).set({phoneNo:phone}).commit()
             }
             const response = await fetch(`/api/checkout`,{
                 method:"POST",
@@ -179,7 +178,6 @@ export default function Checkout() {
                 <span className="sr-only">Loading...</span>
             </div>
         </div>}
-        <ToastContainer />
         <div className='flex 1160:gap-[120px] gap-10 1400:pl-[289px] 1400:pr-[242px] lg:px-28 px-10 900:flex-row flex-col pb-[72px]'>
             <div className='flex flex-col gap-6 pb-[100px]'>
                 <div className=' flex flex-col gap-3'>

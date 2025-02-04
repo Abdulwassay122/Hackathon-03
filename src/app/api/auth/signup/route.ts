@@ -9,7 +9,7 @@ import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from 'next/server';
 
 const userId = uuidv4();
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST (req: NextRequest){
 
@@ -32,7 +32,7 @@ export async function POST (req: NextRequest){
         }
 
         // create new user 
-        const newUser = await client.create({
+        await client.create({
             _type: 'user',
             userId,
             name,

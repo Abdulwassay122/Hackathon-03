@@ -1,4 +1,3 @@
-import { useCartContext } from "@/app/Contexts/CartContext";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
