@@ -1,3 +1,4 @@
+"use client"
 import Checkout from '@/components/Login/Checkout'
 import React from 'react'
 
