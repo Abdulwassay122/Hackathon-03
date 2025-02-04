@@ -29,7 +29,7 @@ interface ProtectedDataResponse {
   }
 
 export default function Checkout() {
-    const ccart = JSON.parse(localStorage.getItem('cart') || "[]");
+    // const ccart = JSON.parse(localStorage.getItem('cart') || "[]");
     const cartContext = useCartContext();
       if (!cartContext) {
         return <div>Loading...</div>;
@@ -39,7 +39,7 @@ export default function Checkout() {
       const [data, setData] = useState<ProtectedDataResponse>();
       
       useEffect(() => {
-        setCart(ccart)
+        // setCart(ccart)
       const fetchData = async () => {
         try {
           const response = await fetch('/api/protected', {
