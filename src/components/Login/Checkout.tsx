@@ -34,7 +34,7 @@ export default function Checkout() {
       if (!cartContext) {
         return <div>Loading...</div>;
       }
-      const { cart, setCart, authToken } = cartContext;
+      const { cart, authToken } = cartContext;
       
       const [data, setData] = useState<ProtectedDataResponse>();
       
