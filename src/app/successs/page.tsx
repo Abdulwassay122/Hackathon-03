@@ -5,8 +5,8 @@ import tick from './assets/check_15526401.png'
 import cross from './assets/remove_1828843.png'
 import Image from "next/image";
 
+const searchParams = useSearchParams();
 export default function page() {
-    const searchParams = useSearchParams();
       const sessionId = searchParams.get("session_id");
       const [paymentStatus, setPaymentStatus] = useState({message:"pending", status:''});
       console.log(sessionId)
