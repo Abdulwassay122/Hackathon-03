@@ -67,7 +67,6 @@ export default function page() {
                 setZoderror([])
                 setLoading(false)
                 setAuthToken(res.token)
-                // localStorage.setItem('token',res.token)
                 toast.success("Successfully Logged In.", {
                         position: "bottom-left",
                         autoClose: 3000,

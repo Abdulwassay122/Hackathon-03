@@ -72,15 +72,10 @@ export default function JoinUs() {
                         setZoderror([])
                         setLoading(false)
                         setSuccess(res.message)
-                        // localStorage.setItem('token', res.token)
-                        // setAuthToken(res.token)
                         toast.success("Veification Email Send.", {
                         position: "bottom-left",
                         autoClose: 3000,
                         })  
-                        // setTimeout(() => {
-                        //     router.push('/')
-                        //   }, 3000);
                     }else{
                         console.error(res.message)
                         setZoderror([{ message: res.message, code: 'custom', path: ['fields'] }])

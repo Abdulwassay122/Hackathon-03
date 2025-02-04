@@ -4,9 +4,10 @@ import { useSearchParams } from "next/navigation";
 import tick from './assets/check_15526401.png'
 import cross from './assets/remove_1828843.png'
 import Image from "next/image";
+import { Suspense } from 'react';
 
-const searchParams = useSearchParams();
-export default function page() {
+function Success() {
+    const searchParams = useSearchParams();
       const sessionId = searchParams.get("session_id");
       const [paymentStatus, setPaymentStatus] = useState({message:"pending", status:''});
       console.log(sessionId)
@@ -62,4 +63,12 @@ export default function page() {
     }
     </div>
   )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Success />
+    </Suspense>
+  );
 }

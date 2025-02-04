@@ -74,7 +74,6 @@ export function CartWrapper ({children}:{
     return [...prevCart, item];
   });
 };
-  // localStorage.setItem('cart', JSON.stringify(cart))
 
   const removeFromCart = (itemId: string) => {
     setCart((prevCart) => prevCart.filter((item) => item.productId !== itemId));

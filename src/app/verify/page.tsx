@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import loader from './assets/Animation - 1738330169677.gif'
 import { useCartContext } from '../Contexts/CartContext';
+import { Suspense } from 'react';
 
-export default function page() {
+function VerifyPage() {
     const router = useRouter()
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
@@ -31,7 +32,6 @@ export default function page() {
             setLoading(false)
             setMessage(res.message)
             setAuthToken(res.token)
-            // localStorage.setItem('token',res.token)
             setTimeout(() => {
                 router.push('/')
             }, 2000);
@@ -46,4 +46,12 @@ export default function page() {
       </div>
     </div>
   )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyPage />
+    </Suspense>
+  );
 }

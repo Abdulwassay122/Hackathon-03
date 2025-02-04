@@ -1,4 +1,5 @@
 "use client"
+
 import React, { FormEvent, useEffect, useState } from 'react'
 import Image from "next/image";
 import location from './assets/Frame (20).svg'
