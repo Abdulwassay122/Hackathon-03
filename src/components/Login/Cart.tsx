@@ -17,18 +17,18 @@ export default function Cart() {
   if (!cartContext) {
     return <div>Loading...</div>;
   }
-  const { cart, setCart, removeFromCart, authToken } = cartContext;
+  const { cart, removeFromCart, authToken } = cartContext;
   
-  useEffect(() => {
-    const ccart = JSON.parse(localStorage.getItem('cart')||"{}")
-    if (ccart) {
-        setCart(ccart);
-      }
-    }, []);
+  // useEffect(() => {
+  //   const ccart = JSON.parse(localStorage.getItem('cart')||"[]")
+  //   if (ccart) {
+  //       setCart((prev)=> [...prev, ccart]);
+  //     }
+  //   }, []);
     
-    useEffect(() => {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }, [cart]);
+  //   useEffect(() => {
+  //     localStorage.setItem('cart', JSON.stringify(cart));
+  //   }, [cart]);
 
     
     function checkOut(){
@@ -85,7 +85,7 @@ for(let i=0; i<data.length; i++){
                           </div>
                           <div className='flex gap-4 mt-6'>
                               <Image src={wishlist} alt="" />
-                              <button onClick={()=>removeFromCart(item.productId)}><Image src={deletee} alt="" /></button>
+                              <button onClick={()=>removeFromCart(item.productId, item.size, item.color)}><Image src={deletee} alt="" /></button>
                           </div>
                       </div>
                         <p className='text-[15px] text-[#111111] leading-7'>{`₹ ${item.price*item.quantity}`}</p>

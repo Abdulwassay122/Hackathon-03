@@ -1,5 +1,5 @@
 "use client"
-import {createContext, useContext, useState} from 'react'
+import {createContext, useContext, useEffect, useState} from 'react'
 
 interface CartContextType {
 
@@ -9,7 +9,7 @@ interface CartContextType {
 
   addToCart: (item: cartItem) => void;
 
-  removeFromCart: (itemId: string) => void;
+  removeFromCart: (itemId: string, itemSize:string, itemColor: string) => void;
 
   clearCart: () => void;
 
@@ -56,12 +56,11 @@ export function CartWrapper ({children}:{
   const [authToken, setAuthToken] = useState<string>('')
 
   const addToCart = (item: cartItem) => {
-  setCart((prevCart) => {
-    const existingItem = prevCart.find((cartItem) => cartItem.productId === item.productId && cartItem.size === item.size && cartItem.color === item.color);
-    if (existingItem) {
-      // Update the quantity and total price
-      return prevCart.map((cartItem) =>
-        cartItem.productId === item.productId && cartItem.size === item.size && cartItem.color === item.color
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((cartItem) =>
+        cartItem.productId === item.productId &&
+        cartItem.size === item.size &&
+        cartItem.color === item.color
           ? {
               ...cartItem,
               quantity: cartItem.quantity + item.quantity,
@@ -69,14 +68,45 @@ export function CartWrapper ({children}:{
             }
           : cartItem
       );
-    }
-    // Add new item to the cart
-    return [...prevCart, item];
-  });
-};
+  
+      // Check if item was updated, if not, add it as a new item
+      const itemExists = prevCart.some(
+        (cartItem) =>
+          cartItem.productId === item.productId &&
+          cartItem.size === item.size &&
+          cartItem.color === item.color
+      );
+  
+      const newCart = itemExists ? updatedCart : [...prevCart, item];
+  
+      // Store in localStorage
+      localStorage.setItem("cart", JSON.stringify(newCart));
+  
+      return newCart;
+    });
+  };
+  
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+  
 
-  const removeFromCart = (itemId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.productId !== itemId));
+  const removeFromCart = (itemId: string, itemSize: string, itemColor: string) => {
+    setCart((prevCart) => {
+      const newCart = prevCart.filter(
+        (item) =>
+          !(
+            item.productId === itemId &&
+            item.size === itemSize &&
+            item.color === itemColor
+          )
+      );
+  
+      // Update localStorage
+      localStorage.setItem("cart", JSON.stringify(newCart));
+  
+      return newCart;
+    });
   };
 
   const clearCart = () => {
