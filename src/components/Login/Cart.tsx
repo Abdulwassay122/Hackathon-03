@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from "next/image";
 import wishlist from './assets/Frame (14).svg';
 import deletee from './assets/Frame (15).svg'
@@ -17,7 +17,7 @@ export default function Cart() {
   if (!cartContext) {
     return <div>Loading...</div>;
   }
-  const { cart, removeFromCart, authToken } = cartContext;
+  const { cart,  removeFromCart, authToken } = cartContext;
   
   // useEffect(() => {
   //   const ccart = JSON.parse(localStorage.getItem('cart')||"[]")
@@ -29,7 +29,6 @@ export default function Cart() {
   //   useEffect(() => {
   //     localStorage.setItem('cart', JSON.stringify(cart));
   //   }, [cart]);
-
     
     function checkOut(){
       if(authToken.length === 0 ){

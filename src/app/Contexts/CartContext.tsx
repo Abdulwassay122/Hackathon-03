@@ -46,7 +46,13 @@ export interface cartItem {
 export function CartWrapper ({children}:{
   children: React.ReactNode;
 }){
-  const [cart, setCart] = useState<cartItem[]>([])
+  const [cart, setCart] = useState<cartItem[]>(() => {
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    }
+    return [];
+  });
   
   const [under2500, setunder2500] = useState<boolean>(false)
   const [under7500, setunder7500] = useState<boolean>(false)
