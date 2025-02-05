@@ -5,7 +5,7 @@ import tick from './assets/check_15526401.png'
 import cross from './assets/remove_1828843.png'
 import Image from "next/image";
 import { Suspense } from 'react';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 function Success() {
   const router = useRouter();
