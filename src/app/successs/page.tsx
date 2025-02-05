@@ -5,8 +5,10 @@ import tick from './assets/check_15526401.png'
 import cross from './assets/remove_1828843.png'
 import Image from "next/image";
 import { Suspense } from 'react';
+import { useRouter } from "next/router";
 
 function Success() {
+  const router = useRouter();
     const searchParams = useSearchParams();
       const sessionId = searchParams.get("session_id");
       const [paymentStatus, setPaymentStatus] = useState({message:"pending", status:''});
@@ -27,6 +29,9 @@ function Success() {
           
           localStorage.removeItem('order')
           localStorage.removeItem('shipment')
+          setTimeout(() => {
+            router.push('/orders')
+          }, 2000);
         } catch (error) {
           console.error("Error saving order/shipment:", error);
         }
